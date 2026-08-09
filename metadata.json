@@ -1,0 +1,6 @@
+{
+  "name": "DataLens Document Viewer & PDF Exporter",
+  "description": "Documento HTML estilizado y exportación a PDF descargable para la documentación de DataLens",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
