@@ -127,9 +127,27 @@ Este proyecto viene preconfigurado con **GitHub Actions** (`.github/workflows/de
 3. En **Source**, selecciona **GitHub Actions**.
 4. Cada commit pushed a la rama `main` o `master` compilará y publicará la aplicación automáticamente.
 
+### Despliegue en Vercel
+
+Este proyecto utiliza **Vite + React + TypeScript** (no Angular). Si Vercel detectó por error el framework como Angular y muestra el mensaje `sh: línea 1: ng: comando no encontrado`:
+
+1. El repositorio incluye un archivo **`vercel.json`** que fuerza el selector a **Vite**:
+   ```json
+   {
+     "framework": "vite",
+     "buildCommand": "npm run build:static",
+     "outputDirectory": "dist"
+   }
+   ```
+2. **Ajustes en el Panel de Vercel (Project Settings):**
+   - **Framework Preset:** Selecciona `Vite` (o `Other`). **NO** selecciones `Angular`.
+   - **Build Command:** `npm run build:static` (o `vite build`)
+   - **Output Directory:** `dist`
+   - **Install Command:** `npm install`
+
 ### Compilación Estática Manual
 
-Para desplegar en servicios como **Vercel**, **Netlify**, **Cloudflare Pages** o **AWS S3**:
+Para desplegar en otros servicios como **Netlify**, **Render**, **Cloudflare Pages** o **AWS S3**:
 
 ```bash
 npm run build:static
@@ -174,4 +192,4 @@ datalens-studio/
 ## 🛡️ Licencia & Créditos
 
 Este proyecto está distribuido bajo la licencia **AGPL-3.0**.  
-Creado por el equipo de **Flujo_Base**.
+Creado por el equipo de **DataLens / Flujo_Base**.
