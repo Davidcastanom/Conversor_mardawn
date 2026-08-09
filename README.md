@@ -174,4 +174,4 @@ datalens-studio/
 ## 🛡️ Licencia & Créditos
 
 Este proyecto está distribuido bajo la licencia **AGPL-3.0**.  
-Creado por el equipo de **DataLens / Flujo_Base**.
+Creado por el equipo de **Flujo_Base**.
