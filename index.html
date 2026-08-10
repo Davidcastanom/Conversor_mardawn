@@ -1,11 +1,86 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
+    
+    <!-- Title & SEO Meta Tags -->
+    <title>MarkFlow Studio — Conversor & Editor Universal Markdown a PDF y HTML</title>
+    <meta name="title" content="MarkFlow Studio — Conversor & Editor Universal Markdown a PDF y HTML" />
+    <meta name="description" content="Entorno profesional de documentación y edición Markdown en tiempo real con exportación PDF A4 de alta precisión, plantillas ejecutivas e ingeniería de software sin marcas de agua." />
+    <meta name="keywords" content="Markdown, Editor Markdown, PDF, HTML5, Conversor Markdown, Markdown a PDF, Plantillas Markdown, MarkFlow Studio, Flujo Base" />
+    <meta name="author" content="MarkFlow Studio por Flujo Base" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#020617" />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!-- Open Graph / Facebook / WhatsApp / LinkedIn / Telegram -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MarkFlow Studio" />
+    <meta property="og:title" content="MarkFlow Studio — Conversor & Editor Universal Markdown a PDF y HTML" />
+    <meta property="og:description" content="Edita, previsualiza y exporta documentos Markdown profesionales a PDF A4 y HTML5 autocontenido. Incluye plantillas ejecutivas e interfaz de ingeniería." />
+    <meta property="og:image" content="/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="MarkFlow Studio — Suite de Documentación Markdown a PDF" />
+    <meta property="og:locale" content="es_ES" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="MarkFlow Studio — Conversor & Editor Universal Markdown a PDF y HTML" />
+    <meta name="twitter:description" content="Edita, previsualiza y exporta documentos Markdown profesionales a PDF A4 y HTML5 autocontenido sin marcas de agua." />
+    <meta name="twitter:image" content="/og-image.jpg" />
+    <meta name="twitter:image:alt" content="MarkFlow Studio — Suite de Documentación Markdown a PDF" />
+
+    <!-- Dynamic absolute URL injector for social preview crawlers -->
+    <script>
+      (function() {
+        try {
+          var origin = window.location.origin;
+          var ogImg = document.querySelector('meta[property="og:image"]');
+          var twImg = document.querySelector('meta[name="twitter:image"]');
+          var ogUrl = document.querySelector('meta[property="og:url"]');
+          
+          if (ogImg && !ogImg.content.startsWith('http')) {
+            ogImg.content = origin + '/og-image.jpg';
+          }
+          if (twImg && !twImg.content.startsWith('http')) {
+            twImg.content = origin + '/og-image.jpg';
+          }
+          if (!ogUrl) {
+            var metaUrl = document.createElement('meta');
+            metaUrl.setAttribute('property', 'og:url');
+            metaUrl.setAttribute('content', origin);
+            document.head.appendChild(metaUrl);
+          }
+        } catch(e) {}
+      })();
+    </script>
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "MarkFlow Studio",
+        "alternateName": "MarkFlow Studio Markdown Editor",
+        "description": "Plataforma profesional de edición y conversión de Markdown a PDF y HTML5 de alta precisión.",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
   </head>
-  <body>
+  <body class="bg-slate-950 text-slate-100 antialiased">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
