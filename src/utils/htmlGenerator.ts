@@ -308,16 +308,24 @@ export function generateFullHtmlDocument(
       border-bottom-style: solid;
     }
 
-    /* Footer */
+    /* Footer (Minimalist & Discrete) */
     footer.doc-footer {
-      margin-top: 4rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--color-border);
+      margin-top: 2rem;
+      padding-top: 0.75rem;
+      border-top: 1px dashed var(--color-border);
       text-align: center;
       color: var(--color-text-light);
-      font-size: 0.875rem;
+      font-size: 0.68rem;
+      line-height: 1.3;
+      opacity: 0.6;
       page-break-inside: avoid;
       break-inside: avoid;
+    }
+
+    footer.doc-footer p {
+      margin: 0;
+      padding: 0;
+      font-weight: 400;
     }
 
     /* Print Stylesheet */
@@ -349,6 +357,17 @@ export function generateFullHtmlDocument(
         display: none !important;
       }
 
+      footer.doc-footer {
+        margin-top: 1.2rem !important;
+        padding-top: 0.5rem !important;
+        font-size: 8px !important;
+        color: #94a3b8 !important;
+        border-top: 1px solid #e2e8f0 !important;
+        opacity: 0.55 !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
       h1, h2, h3, h4, h5, h6 {
         break-after: avoid !important;
         page-break-after: avoid !important;
@@ -374,8 +393,7 @@ export function generateFullHtmlDocument(
     ${parsedBody}
 
     <footer class="doc-footer">
-      <p><strong>MarkFlow Studio</strong> — Conversor & Editor Universal de Documentos Markdown.</p>
-      <p>Creado por <strong>Flujo_Base</strong> | Licencia AGPL-3.0</p>
+      <p>Documento generado con MarkFlow Studio por Flujo_Base</p>
     </footer>
   </article>
 
