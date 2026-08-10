@@ -1,6 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   RotateCcw,
+  Undo2,
+  Redo2,
   Sparkles,
   FileText,
   Upload,
@@ -23,7 +25,9 @@ import {
   BookOpen,
   HelpCircle,
   ExternalLink,
+  Image as ImageIcon,
 } from 'lucide-react';
+import { InsertImageModal } from './InsertImageModal';
 
 interface MarkdownEditorProps {
   markdown: string;
@@ -49,8 +53,95 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
 }) => {
   const [editorMode, setEditorMode] = useState<EditorMode>('split');
   const [fontSize, setFontSize] = useState<FontSize>('lg'); // Default 18px / large for high visibility!
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Undo & Redo History Management
+  const [undoStack, setUndoStack] = useState<string[]>([]);
+  const [redoStack, setRedoStack] = useState<string[]>([]);
+  const lastRecordedMarkdown = useRef<string>(markdown);
+
+  const pushToUndoStack = (previousContent: string) => {
+    if (previousContent === markdown && undoStack.length > 0 && undoStack[undoStack.length - 1] === previousContent) {
+      return;
+    }
+    setUndoStack((prev) => [...prev.slice(-49), previousContent]);
+    setRedoStack([]);
+    lastRecordedMarkdown.current = markdown;
+  };
+
+  const handleUndo = () => {
+    if (undoStack.length === 0) return;
+    const previous = undoStack[undoStack.length - 1];
+    const newUndoStack = undoStack.slice(0, -1);
+    setUndoStack(newUndoStack);
+    setRedoStack((prev) => [...prev, markdown]);
+    lastRecordedMarkdown.current = previous;
+    setMarkdown(previous);
+  };
+
+  const handleRedo = () => {
+    if (redoStack.length === 0) return;
+    const next = redoStack[redoStack.length - 1];
+    const newRedoStack = redoStack.slice(0, -1);
+    setRedoStack(newRedoStack);
+    setUndoStack((prev) => [...prev, markdown]);
+    lastRecordedMarkdown.current = next;
+    setMarkdown(next);
+  };
+
+  // Keyboard shortcut listener for Ctrl+Z and Ctrl+Y / Ctrl+Shift+Z
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const isCtrlOrCmd = e.ctrlKey || e.metaKey;
+
+    if (isCtrlOrCmd && e.key.toLowerCase() === 'z') {
+      e.preventDefault();
+      if (e.shiftKey) {
+        handleRedo();
+      } else {
+        handleUndo();
+      }
+    } else if (isCtrlOrCmd && e.key.toLowerCase() === 'y') {
+      e.preventDefault();
+      handleRedo();
+    }
+  };
+
+  // When typing in textarea
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const val = e.target.value;
+    if (
+      val.endsWith(' ') ||
+      val.endsWith('\n') ||
+      Math.abs(val.length - lastRecordedMarkdown.current.length) > 5
+    ) {
+      pushToUndoStack(lastRecordedMarkdown.current);
+    }
+    setMarkdown(val);
+  };
+
+  // Handle dropping images directly onto the editor textarea
+  const handleDropOnTextarea = (e: React.DragEvent<HTMLTextAreaElement>) => {
+    const files = Array.from(e.dataTransfer.files) as File[];
+    const imageFile = files.find((f: File) => f.type.startsWith('image/'));
+
+    if (imageFile) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64 = event.target?.result as string;
+        const alt = imageFile.name.replace(/\.[^/.]+$/, '');
+        const imageSnippet = `\n![${alt}](${base64})\n`;
+
+        pushToUndoStack(markdown);
+        setMarkdown((prev) => prev + imageSnippet);
+      };
+      reader.readAsDataURL(imageFile);
+    }
+  };
 
   const handleDownloadMd = () => {
     const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
@@ -68,6 +159,8 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
   const insertSyntax = (prefix: string, suffix: string = '') => {
     const textarea = textareaRef.current;
     if (!textarea) return;
+
+    pushToUndoStack(markdown);
 
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
@@ -214,6 +307,29 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
         
         {/* Markdown Insertion Helpers */}
         <div className="flex items-center gap-1 flex-wrap">
+          {/* Undo & Redo Buttons */}
+          <button
+            onClick={handleUndo}
+            disabled={undoStack.length === 0}
+            className="flex items-center gap-1 px-2 py-1 bg-slate-800 hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed text-slate-200 text-xs font-semibold rounded-md border border-slate-700 transition-all active:scale-95 mr-1"
+            title="Deshacer cambio (Ctrl + Z)"
+          >
+            <Undo2 className="w-3.5 h-3.5 text-blue-400" />
+            <span className="hidden xs:inline">Deshacer</span>
+          </button>
+
+          <button
+            onClick={handleRedo}
+            disabled={redoStack.length === 0}
+            className="flex items-center gap-1 px-2 py-1 bg-slate-800 hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed text-slate-200 text-xs font-semibold rounded-md border border-slate-700 transition-all active:scale-95 mr-2"
+            title="Rehacer cambio (Ctrl + Y o Ctrl + Shift + Z)"
+          >
+            <Redo2 className="w-3.5 h-3.5 text-blue-400" />
+            <span className="hidden xs:inline">Rehacer</span>
+          </button>
+
+          <div className="h-4 w-px bg-slate-800 my-auto mr-1.5 hidden sm:block" />
+
           <span className="text-[11px] text-slate-400 font-medium mr-1.5 hidden sm:inline">Formato:</span>
           
           <button
@@ -289,36 +405,21 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
           </button>
 
           <button
+            onClick={() => setIsImageModalOpen(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1 bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 font-semibold text-xs rounded-md border border-blue-500/30 transition-all active:scale-95"
+            title="Añadir Imagen (Foto de tu equipo, URL o plantilla)"
+          >
+            <ImageIcon className="w-3.5 h-3.5 text-blue-400" />
+            <span>Imagen</span>
+          </button>
+
+          <button
             onClick={() => insertSyntax('![Badge](https://img.shields.io/badge/Estado-Aprobado-success)')}
             className="p-1.5 hover:bg-slate-800 rounded-md text-slate-300 hover:text-white transition-colors"
             title="Insertar Badge de Shields.io"
           >
             <Shield className="w-4 h-4 text-amber-400" />
           </button>
-
-          <div className="h-4 w-px bg-slate-800 my-auto mx-1" />
-
-          {onOpenGuide && (
-            <button
-              onClick={onOpenGuide}
-              className="flex items-center gap-1.5 px-2.5 py-1 bg-indigo-900/50 hover:bg-indigo-800/80 text-indigo-200 border border-indigo-500/30 rounded-md text-xs font-semibold transition-all"
-              title="Abrir la Guía completa de Sintaxis y Atajos Markdown"
-            >
-              <BookOpen className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Guía MD</span>
-            </button>
-          )}
-
-          <a
-            href="https://www.markdownguide.org/cheat-sheet/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md text-xs font-medium border border-slate-700 transition-all"
-            title="Documentación oficial externa de Markdown"
-          >
-            <span className="hidden md:inline">Docs Oficiales</span>
-            <ExternalLink className="w-3 h-3 text-slate-400" />
-          </a>
         </div>
 
         {/* Font Size Selector for High Visibility */}
@@ -385,8 +486,11 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
               <textarea
                 ref={textareaRef}
                 value={markdown}
-                onChange={(e) => setMarkdown(e.target.value)}
-                placeholder="Escribe o pega tu contenido Markdown aquí, o arrastra un archivo .md directamente a este recuadro..."
+                onChange={handleTextareaChange}
+                onKeyDown={handleKeyDown}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={handleDropOnTextarea}
+                placeholder="Escribe o pega tu contenido Markdown aquí, o arrastra una imagen o archivo .md directamente a este recuadro..."
                 className={`w-full h-full min-h-[520px] flex-1 p-5 bg-slate-900/95 text-slate-100 font-mono border border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/80 resize-none custom-scrollbar selection:bg-blue-500 selection:text-white ${fontSizeClasses[fontSize]}`}
               />
             </div>
@@ -430,6 +534,16 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
           <span>{markdown.length.toLocaleString()} caracteres</span>
         </div>
       </div>
+
+      {/* Insert Image Modal */}
+      <InsertImageModal
+        isOpen={isImageModalOpen}
+        onClose={() => setIsImageModalOpen(false)}
+        onInsertImage={(snippet) => {
+          pushToUndoStack(markdown);
+          setMarkdown((prev) => prev + '\n\n' + snippet + '\n');
+        }}
+      />
 
     </div>
   );

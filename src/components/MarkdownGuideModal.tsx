@@ -118,9 +118,21 @@ const CHEATSHEET_SNIPPETS: SnippetItem[] = [
     category: 'avanzado',
   },
   {
-    title: 'Enlaces e Imágenes',
-    syntax: '[Visitar Flujo Base](https://github.com)\n![Texto Alternativo](https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&q=80)',
-    description: 'Inclusión de hipervínculos e imágenes',
+    title: 'Añadir Imagen (URL o Fotos Locales)',
+    syntax: '![Descripción de la imagen](https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600)\n\n<!-- O sube/arrastra una foto local con el botón "Imagen" (se incrusta en Base64 offline) -->',
+    description: 'Sintaxis estándar de imagen. Consejo: Usa el botón "Imagen" para subir fotos desde tu PC.',
+    category: 'avanzado',
+  },
+  {
+    title: 'Imagen Centrada con Ancho Específico (HTML)',
+    syntax: '<p align="center">\n  <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800" alt="Grafico" width="400" style="border-radius: 8px;" />\n</p>',
+    description: 'Permite centrar imágenes y ajustar su tamaño exacto para impresión en PDF',
+    category: 'avanzado',
+  },
+  {
+    title: 'Enlaces e Hipervínculos',
+    syntax: '[Visitar sitio web oficial](https://markdownguide.org)\n[Descargar documento](#)',
+    description: 'Creación de hipervínculos cliqueables en el documento',
     category: 'avanzado',
   },
   {
