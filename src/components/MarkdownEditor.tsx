@@ -194,110 +194,80 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
   return (
     <div className="flex flex-col h-full min-h-[750px] bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
       
-      {/* Editor Header Bar */}
-      <div className="bg-slate-900 px-4 py-3 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 text-sm">
+      {/* Editor Sub-Header Bar (Layout Mode & Utilities) */}
+      <div className="bg-slate-900 px-4 py-2.5 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
         
-        {/* Left: Document Name & Visibility Badges */}
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
-            <FileText className="w-4 h-4" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h3 className="font-bold text-slate-100 text-sm">Editor Markdown</h3>
-              <span className="bg-blue-500/20 text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded text-xs font-mono font-medium">
-                {documentTitle}.md
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-400">Edita texto en tiempo real con vista previa en vivo</p>
+        {/* Left: View Mode Controls (Solo Editor / Split / Vista Previa) */}
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider hidden sm:inline">Disposición:</span>
+          <div className="flex items-center bg-slate-950 p-1 rounded-lg border border-slate-800">
+            <button
+              onClick={() => setEditorMode('editor')}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium transition-all ${
+                editorMode === 'editor'
+                  ? 'bg-blue-600 text-white font-semibold'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Maximize2 className="w-3.5 h-3.5" />
+              <span>Editor</span>
+            </button>
+
+            <button
+              onClick={() => setEditorMode('split')}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium transition-all ${
+                editorMode === 'split'
+                  ? 'bg-blue-600 text-white font-semibold'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Columns className="w-3.5 h-3.5" />
+              <span>Vista Dividida</span>
+            </button>
+
+            <button
+              onClick={() => setEditorMode('preview')}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium transition-all ${
+                editorMode === 'preview'
+                  ? 'bg-blue-600 text-white font-semibold'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Eye className="w-3.5 h-3.5" />
+              <span>Previsualización</span>
+            </button>
           </div>
         </div>
 
-        {/* Center: View Layout Switcher (Solo Editor / Split / Vista Previa) */}
-        <div className="flex items-center bg-slate-800/90 p-1 rounded-xl border border-slate-700/80">
-          <button
-            onClick={() => setEditorMode('editor')}
-            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
-              editorMode === 'editor'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
-            }`}
-          >
-            <Maximize2 className="w-3.5 h-3.5" />
-            <span>Sólo Editor</span>
-          </button>
+        {/* Right: Metrics & Editor Reset Actions */}
+        <div className="flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-2 font-mono text-[11px] text-slate-400 bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800/80">
+            <span>{lineCount} líneas</span>
+            <span>•</span>
+            <span>{wordCount} palabras</span>
+            <span>•</span>
+            <span>{markdown.length} caracteres</span>
+          </div>
 
-          <button
-            onClick={() => setEditorMode('split')}
-            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
-              editorMode === 'split'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
-            }`}
-          >
-            <Columns className="w-3.5 h-3.5" />
-            <span>Vista Dividida (Split)</span>
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={onReset}
+              className="flex items-center gap-1 px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium text-xs rounded-md border border-slate-700 transition-all active:scale-95"
+              title="Restablecer contenido por defecto"
+            >
+              <RotateCcw className="w-3.5 h-3.5 text-slate-400" />
+              <span>Restablecer</span>
+            </button>
 
-          <button
-            onClick={() => setEditorMode('preview')}
-            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
-              editorMode === 'preview'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
-            }`}
-          >
-            <Eye className="w-3.5 h-3.5" />
-            <span>Vista Previa</span>
-          </button>
-        </div>
-
-        {/* Right: Actions */}
-        <div className="flex items-center gap-2 flex-wrap">
-          
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".md,.markdown,.txt"
-            onChange={onFileUpload}
-            className="hidden"
-          />
-
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-lg shadow-sm border border-emerald-400/30 transition-all active:scale-95"
-            title="Cargar un archivo .md o .txt local"
-          >
-            <Upload className="w-3.5 h-3.5" />
-            <span>Subir .md</span>
-          </button>
-
-          <button
-            onClick={handleDownloadMd}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-xs rounded-lg border border-slate-700 transition-all active:scale-95"
-            title="Guardar contenido actual como archivo .md"
-          >
-            <Download className="w-3.5 h-3.5 text-blue-400" />
-            <span>Guardar .md</span>
-          </button>
-
-          <button
-            onClick={onReset}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-xs rounded-lg border border-slate-700 transition-all active:scale-95"
-            title="Restablecer al Markdown por defecto"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Restablecer</span>
-          </button>
-
-          <button
-            onClick={() => setMarkdown('')}
-            className="flex items-center gap-1 px-2.5 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 font-medium text-xs rounded-lg border border-rose-500/20 transition-all active:scale-95"
-            title="Limpiar todo el editor"
-          >
-            <Trash2 className="w-3.5 h-3.5" />
-            <span>Limpiar</span>
-          </button>
+            <button
+              onClick={() => setMarkdown('')}
+              className="flex items-center gap-1 px-2.5 py-1 bg-slate-800 hover:bg-rose-950/50 hover:text-rose-300 text-slate-400 font-medium text-xs rounded-md border border-slate-700 transition-all active:scale-95"
+              title="Limpiar área de texto"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span>Limpiar</span>
+            </button>
+          </div>
         </div>
 
       </div>
