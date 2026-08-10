@@ -9,7 +9,7 @@ export function convertMarkdownToHtmlBody(markdown: string): string {
 export function generateFullHtmlDocument(
   markdownContent: string,
   theme: ThemeConfig,
-  documentTitle: string = 'DataLens — Documentación'
+  documentTitle: string = 'MarkFlow Studio — Documentación'
 ): string {
   const parsedBody = convertMarkdownToHtmlBody(markdownContent);
 
@@ -21,7 +21,7 @@ export function generateFullHtmlDocument(
   <title>${documentTitle}</title>
   <style>
     /* ==========================================================================
-       DataLens Document Design System (Embedded CSS)
+       MarkFlow Studio Document Design System (Embedded CSS)
        ========================================================================== */
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
@@ -374,7 +374,7 @@ export function generateFullHtmlDocument(
     ${parsedBody}
 
     <footer class="doc-footer">
-      <p><strong>DataLens</strong> — Entiende la anatomía de tu información en segundos.</p>
+      <p><strong>MarkFlow Studio</strong> — Conversor & Editor Universal de Documentos Markdown.</p>
       <p>Creado por <strong>Flujo_Base</strong> | Licencia AGPL-3.0</p>
     </footer>
   </article>

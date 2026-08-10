@@ -1,6 +1,6 @@
 {
-  "name": "DataLens Document Viewer & PDF Exporter",
-  "description": "Documento HTML estilizado y exportación a PDF descargable para la documentación de DataLens",
+  "name": "MarkFlow Studio — Conversor Markdown a HTML y PDF",
+  "description": "Conversor universal y editor interactivo de archivos Markdown (.md) a documentos HTML5 y PDF profesionales sin saltos de página accidentales.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

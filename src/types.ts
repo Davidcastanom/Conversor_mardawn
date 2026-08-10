@@ -1,4 +1,4 @@
-export type ViewMode = 'preview' | 'code' | 'editor' | 'customizer';
+export type ViewMode = 'landing' | 'preview' | 'code' | 'editor' | 'customizer';
 
 export interface ThemeConfig {
   name: string;
@@ -11,7 +11,7 @@ export interface ThemeConfig {
 
 export const THEME_PRESETS: Record<string, ThemeConfig> = {
   modernBlue: {
-    name: 'Azul Profesional (DataLens Default)',
+    name: 'Azul Profesional (MarkFlow Default)',
     primaryColor: '#2563eb',
     primaryLight: '#eff6ff',
     bgContainer: '#ffffff',

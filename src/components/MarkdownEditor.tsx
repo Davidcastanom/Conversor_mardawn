@@ -18,6 +18,11 @@ import {
   Code,
   Table,
   List,
+  CheckSquare,
+  Shield,
+  BookOpen,
+  HelpCircle,
+  ExternalLink,
 } from 'lucide-react';
 
 interface MarkdownEditorProps {
@@ -27,6 +32,7 @@ interface MarkdownEditorProps {
   htmlContent: string;
   onReset: () => void;
   onFileUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onOpenGuide?: () => void;
 }
 
 type EditorMode = 'editor' | 'split' | 'preview';
@@ -39,6 +45,7 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
   htmlContent,
   onReset,
   onFileUpload,
+  onOpenGuide,
 }) => {
   const [editorMode, setEditorMode] = useState<EditorMode>('split');
   const [fontSize, setFontSize] = useState<FontSize>('lg'); // Default 18px / large for high visibility!
@@ -272,6 +279,46 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
           >
             <List className="w-4 h-4" />
           </button>
+
+          <button
+            onClick={() => insertSyntax('- [ ] ')}
+            className="p-1.5 hover:bg-slate-800 rounded-md text-slate-300 hover:text-white transition-colors"
+            title="Lista de Tareas / Checkbox"
+          >
+            <CheckSquare className="w-4 h-4 text-emerald-400" />
+          </button>
+
+          <button
+            onClick={() => insertSyntax('![Badge](https://img.shields.io/badge/Estado-Aprobado-success)')}
+            className="p-1.5 hover:bg-slate-800 rounded-md text-slate-300 hover:text-white transition-colors"
+            title="Insertar Badge de Shields.io"
+          >
+            <Shield className="w-4 h-4 text-amber-400" />
+          </button>
+
+          <div className="h-4 w-px bg-slate-800 my-auto mx-1" />
+
+          {onOpenGuide && (
+            <button
+              onClick={onOpenGuide}
+              className="flex items-center gap-1.5 px-2.5 py-1 bg-indigo-900/50 hover:bg-indigo-800/80 text-indigo-200 border border-indigo-500/30 rounded-md text-xs font-semibold transition-all"
+              title="Abrir la Guía completa de Sintaxis y Atajos Markdown"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-indigo-400" />
+              <span>Guía MD</span>
+            </button>
+          )}
+
+          <a
+            href="https://www.markdownguide.org/cheat-sheet/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md text-xs font-medium border border-slate-700 transition-all"
+            title="Documentación oficial externa de Markdown"
+          >
+            <span className="hidden md:inline">Docs Oficiales</span>
+            <ExternalLink className="w-3 h-3 text-slate-400" />
+          </a>
         </div>
 
         {/* Font Size Selector for High Visibility */}

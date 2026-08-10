@@ -5,22 +5,25 @@ export interface SampleTemplate {
   name: string;
   description: string;
   filename: string;
+  category: string;
   content: string;
 }
 
 export const SAMPLE_TEMPLATES: SampleTemplate[] = [
   {
-    id: 'datalens',
-    name: 'README DataLens (ForenseDB)',
-    description: 'Documento completo de arquitectura, instalación y especificaciones',
-    filename: 'DataLens_Documentacion',
+    id: 'documento-inicial',
+    name: 'Documento Inicial Estándar',
+    description: 'Guía de inicio rápido y ejemplo versátil de formato Markdown',
+    filename: 'Mi_Documento_Markdown',
+    category: 'General',
     content: DEFAULT_MARKDOWN,
   },
   {
     id: 'informe-tecnico',
-    name: 'Informe de Auditoría Técnica',
+    name: 'Informe de Auditoría Técnica & Seguridad',
     description: 'Reporte ejecutivo con métricas de infraestructura, tablas y hallazgos',
     filename: 'Informe_Auditoria_Tecnica',
+    category: 'Corporativo',
     content: `# Informe Ejecutivo de Auditoría de Sistemas y Seguridad
 
 ![Clasificación](https://img.shields.io/badge/clasificacion-Confidencial-red)
@@ -89,7 +92,7 @@ Durante el ciclo Q3-2026 se realizó una revisión intensiva de las bases de dat
 
 ---
 
-*Informe generado automáticamente por la plataforma de auditoría.*
+*Informe generado por la suite de auditoría Flujo Base.*
 `,
   },
   {
@@ -97,12 +100,13 @@ Durante el ciclo Q3-2026 se realizó una revisión intensiva de las bases de dat
     name: 'Guía de API REST / Developer Docs',
     description: 'Documentación técnica de endpoints, modelos JSON y respuestas de código',
     filename: 'API_Reference_Manual',
+    category: 'Desarrollo',
     content: `# Especificación de API REST (v1.0)
 
 ![API](https://img.shields.io/badge/API-REST%20v1.0-blue)
 ![Formato](https://img.shields.io/badge/Formato-JSON-orange)
 
-Bienvenido a la referencia oficial de la **API de Integración DataLens**. Todas las peticiones deben enviarse a través de HTTPS con la cabecera \`Authorization: Bearer <TOKEN>\`.
+Bienvenido a la referencia oficial de la **API REST**. Todas las peticiones deben enviarse a través de HTTPS con la cabecera \`Authorization: Bearer <TOKEN>\`.
 
 ---
 
@@ -112,7 +116,7 @@ Para obtener una clave API válida, envíe una petición POST al endpoint de aut
 
 \`\`\`http
 POST /api/v1/auth/login HTTP/1.1
-Host: api.datalens.io
+Host: api.markflow.io
 Content-Type: application/json
 
 {
@@ -144,7 +148,7 @@ Content-Type: application/json
 
 #### Ejemplo cURL:
 \`\`\`bash
-curl -X GET "https://api.datalens.io/api/v1/documents?limit=10" \\
+curl -X GET "https://api.markflow.io/api/v1/documents?limit=10" \\
   -H "Authorization: Bearer tu_token_aqui"
 \`\`\`
 
@@ -168,6 +172,7 @@ curl -X GET "https://api.datalens.io/api/v1/documents?limit=10" \\
     name: 'Curriculum Vitae / Hoja de Vida',
     description: 'Plantilla limpia y profesional para crear hojas de vida exportables a PDF',
     filename: 'CV_Perfil_Profesional',
+    category: 'Personal',
     content: `# Alex R. Valenzuela
 ### **Ingeniero de Software Senior & Arquitecto Frontend**
 📍 Madrid, España | ✉️ alex.valenzuela@devmail.com | 🌐 github.com/alexvalenzuela
@@ -196,10 +201,6 @@ Ingeniero de Software con **más de 8 años de experiencia** liderando equipos d
 - Diseñé el sistema de diseño interno consumido por más de 12 equipos de desarrollo.
 - Mentoricé a un equipo de 6 ingenieros junior y mid-level.
 
-### **Senior Full Stack Developer** | *Innovatech Solutions* (2019 – 2022)
-- Desarrollé APIs REST y WebSockets en Node.js para procesamiento de datos en tiempo real.
-- Optimicé consultas PostgreSQL complejas, mejorando la latencia en un 30%.
-
 ---
 
 ## 🎓 Educación
@@ -212,18 +213,19 @@ Ingeniero de Software con **más de 8 años de experiencia** liderando equipos d
   },
   {
     id: 'vacio',
-    name: 'Documento en Blanco',
-    description: 'Espacio de trabajo limpio para empezar a escribir desde cero',
+    name: 'Documento en Blanco (Lienzo Cero)',
+    description: 'Espacio de trabajo totalmente limpio para escribir cualquier Markdown desde cero',
     filename: 'Nuevo_Documento',
+    category: 'General',
     content: `# Mi Nuevo Documento
 
-Escribe tu contenido Markdown aquí...
+Escribe o pega tu contenido Markdown aquí...
 
 ## Sección 1
 - Elemento 1
 - Elemento 2
 
-> ¡Puedes personalizar los colores en la pestaña "Tema & Estilos"!
+> ¡Puedes personalizar los colores e importar cualquier archivo .md en cualquier momento!
 `,
   },
 ];
